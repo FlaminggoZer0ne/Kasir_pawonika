@@ -564,9 +564,14 @@ async function deleteOrder(id) {
   byId('set-logo-file').addEventListener('change', async (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    const fd = new FormData();
-    fd.append('logo', file);
-    const res = await fetch('/api/upload/logo', { method: 'POST', body: fd });
+    const res = await fetch('/api/upload/logo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type || 'application/octet-stream',
+        'x-filename': encodeURIComponent(file.name || `logo-${Date.now()}`)
+      },
+      body: file
+    });
     if (!res.ok) { alert('Gagal upload logo'); return; }
     await loadSettings();
   });

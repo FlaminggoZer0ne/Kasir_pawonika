@@ -53,6 +53,9 @@ async function migrate() {
 async function ensureSchema() {
   try {
     await sql`SELECT 1 FROM products LIMIT 1`;
+    await sql`SELECT 1 FROM orders LIMIT 1`;
+    await sql`SELECT 1 FROM order_items LIMIT 1`;
+    await sql`SELECT 1 FROM settings LIMIT 1`;
   } catch (e) {
     // if products table missing, run full migrate
     if (String(e.message || e).includes('does not exist')) {
