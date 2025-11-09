@@ -1,3 +1,9 @@
+// Ensure @vercel/postgres can find a connection string on Vercel
+// Primary: POSTGRES_URL. Fallbacks: DATABASE_URL, POSTGRES_PRISMA_URL, POSTGRES_URL_NON_POOLING
+if (!process.env.POSTGRES_URL) {
+  const fallback = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL_NO_SSL;
+  if (fallback) process.env.POSTGRES_URL = fallback;
+}
 const { sql } = require('@vercel/postgres');
 
 async function migrate() {
