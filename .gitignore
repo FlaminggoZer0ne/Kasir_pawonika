@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Local env
+.env
+
+# Build/Cache/OS
+.vercel/
+.DS_Store
+npm-debug.log*
+yarn-error.log*
+
+# App data persisted locally
+/data/
+/public/uploads/
+
+# Misc
+*.log

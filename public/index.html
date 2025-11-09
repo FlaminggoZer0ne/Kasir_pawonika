@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kasir Pawon Ika</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/print.css" media="print">
+  <style>
+    .tab-active { border-bottom: 2px solid #111827; font-weight: 700; }
+    @media print {
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-6xl mx-auto p-4">
+    <header class="flex items-center justify-between gap-4 no-print bg-white/80 backdrop-blur border rounded px-4 py-3 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="h-8 w-8 rounded bg-indigo-600 text-white grid place-items-center font-bold">PI</div>
+        <h1 class="text-xl sm:text-2xl font-semibold tracking-tight">Kasir Pawon Ika</h1>
+      </div>
+
+
+      <div class="flex items-center gap-2 text-sm">
+        <button id="btn-open-settings" class="px-3 py-2 rounded border hover:bg-gray-50">Pengaturan</button>
+        <button id="btn-export" class="px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Backup</button>
+      </div>
+    </header>
+
+    <nav class="mt-4 flex gap-2 sm:gap-4 border-b no-print text-sm sm:text-base">
+      <button class="tab-btn py-2 px-2 -mb-px text-gray-600 hover:text-gray-900 border-b-2 border-transparent" data-tab="pos">Kasir</button>
+      <button class="tab-btn py-2 px-2 -mb-px text-gray-600 hover:text-gray-900 border-b-2 border-transparent" data-tab="products">Produk</button>
+      <button class="tab-btn py-2 px-2 -mb-px text-gray-600 hover:text-gray-900 border-b-2 border-transparent" data-tab="orders">Riwayat</button>
+    </nav>
+
+    <main class="mt-4">
+      <!-- POS Tab -->
+      <section id="tab-pos" class="tab">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <div class="flex flex-col sm:flex-row gap-2 mb-3">
+              <div class="flex gap-2 w-full">
+                <input id="search" type="text" placeholder="Cari produk" class="w-full px-3 py-2 border rounded" />
+                <select id="category-filter" class="px-3 py-2 border rounded min-w-[140px]">
+                  <option value="">Semua Kategori</option>
+                </select>
+              </div>
+              <div class="flex">
+                <button id="btn-add-custom" class="px-3 py-2 rounded bg-amber-500 text-white hover:bg-amber-600 inline-flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                  </svg>
+                  Tambah Manual
+                </button>
+              </div>
+            </div>
+            <div id="product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+          </div>
+          <aside class="md:col-span-1">
+            <div class="bg-white border rounded-lg p-3 sm:p-4 flex flex-col gap-3 shadow-sm">
+              <div>
+                <h2 class="font-semibold mb-2 text-gray-800">Keranjang</h2>
+                <div id="cart" class="flex flex-col gap-2"></div>
+              </div>
+              <div class="text-sm flex flex-col gap-1">
+                <div class="flex justify-between"><span class="text-gray-600">Subtotal</span><span id="subtotal" class="font-medium">Rp 0</span></div>
+                <label class="flex justify-between items-center gap-2">
+                  <span class="text-gray-600">Diskon</span>
+                  <input id="discount" type="number" class="w-28 px-2 py-1 border rounded text-right focus:outline-none focus:ring-2 focus:ring-indigo-500/30" value="0"/>
+                </label>
+                <label class="flex justify-between items-center gap-2">
+                  <span class="text-gray-600">Pajak</span>
+                  <input id="tax" type="number" class="w-28 px-2 py-1 border rounded text-right focus:outline-none focus:ring-2 focus:ring-indigo-500/30" value="0"/>
+                </label>
+                <div class="flex justify-between font-semibold text-lg pt-2 border-t"><span>Total</span><span id="total" class="text-gray-900">Rp 0</span></div>
+              </div>
+              <div class="flex flex-col gap-2">
+                <input id="customer_name" type="text" placeholder="Nama pelanggan (opsional)" class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+                <select id="payment_method" class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/30">
+                  <option value="CASH">Cash</option>
+                  <option value="TRANSFER">Transfer</option>
+                  <option value="QRIS">QRIS</option>
+                </select>
+                <input id="paid_amount" type="number" placeholder="Jumlah dibayar" class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+                <textarea id="note" placeholder="Catatan" class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/30"></textarea>
+                <button id="btn-checkout" class="px-3 py-3 rounded bg-indigo-600 text-white hover:bg-indigo-700">Simpan & Cetak</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Products Tab -->
+      <section id="tab-products" class="tab hidden">
+        <div class="bg-white border rounded-lg p-3 sm:p-4 shadow-sm">
+          <div class="flex flex-wrap gap-2 mb-3">
+            <input id="prod-name" placeholder="Nama" class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+            <input id="prod-price" placeholder="Harga" type="number" class="px-3 py-2 border rounded w-32 text-right focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+            <input id="prod-unit" placeholder="Satuan" class="px-3 py-2 border rounded w-32 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+            <input id="prod-category" placeholder="Kategori" class="px-3 py-2 border rounded w-32 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"/>
+            <button id="prod-add" class="px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Tambah</button>
+          </div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b text-gray-600">
+                <th class="py-2 font-medium">Nama</th>
+                <th class="font-medium">Harga</th>
+                <th class="font-medium">Satuan</th>
+                <th class="font-medium">Kategori</th>
+                <th class="font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="prod-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Orders Tab -->
+      <section id="tab-orders" class="tab hidden">
+        <div class="bg-white border rounded-lg p-3 sm:p-4 shadow-sm">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b text-gray-600">
+                <th class="py-2 font-medium">Tanggal</th>
+                <th class="font-medium">Invoice</th>
+                <th class="font-medium">Pelanggan</th>
+                <th class="font-medium">Total</th>
+                <th class="font-medium">Metode</th>
+                <th class="font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Pengaturan modal -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/30 hidden items-center justify-center no-print">
+    <div class="bg-white w-full max-w-lg rounded p-4 flex flex-col gap-3">
+      <h3 class="text-lg font-semibold">Pengaturan Toko</h3>
+      <label class="text-sm">Nama Toko <input id="set-store-name" class="w-full px-3 py-2 border rounded"/></label>
+      <label class="text-sm">Alamat <textarea id="set-store-address" class="w-full px-3 py-2 border rounded"></textarea></label>
+      <label class="text-sm">Telepon/WA <input id="set-store-phone" class="w-full px-3 py-2 border rounded"/></label>
+      <label class="text-sm">Prefix Invoice <input id="set-invoice-prefix" class="w-full px-3 py-2 border rounded"/></label>
+      <label class="text-sm">Lebar Kertas (58/80) <input id="set-paper-width" class="w-full px-3 py-2 border rounded"/></label>
+      <div class="text-sm flex flex-col gap-2">
+        <div>Logo Toko (PNG/JPG) untuk struk</div>
+        <input type="file" id="set-logo-file" accept="image/png,image/jpeg" class="w-full"/>
+        <img id="set-logo-preview" alt="Preview Logo" class="max-h-20 object-contain border rounded p-1 hidden"/>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button id="btn-close-settings" class="px-3 py-2 rounded border">Batal</button>
+        <button id="btn-save-settings" class="px-3 py-2 rounded bg-indigo-600 text-white">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Edit modal (correct) -->
+  <div id="order-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center no-print z-50">
+    <div class="bg-white w-full max-w-lg max-h-[85vh] overflow-auto rounded shadow-lg p-4 flex flex-col gap-3">
+      <h3 class="text-lg font-semibold">Ubah Transaksi</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <label class="text-sm">Pelanggan <input id="ord-customer" class="w-full px-3 py-2 border rounded"/></label>
+        <label class="text-sm">Metode Bayar
+          <select id="ord-method" class="w-full px-3 py-2 border rounded">
+            <option value="CASH">Cash</option>
+            <option value="TRANSFER">Transfer</option>
+            <option value="QRIS">QRIS</option>
+          </select>
+        </label>
+        <label class="text-sm">Diskon <input id="ord-discount" type="number" class="w-full px-3 py-2 border rounded text-right"/></label>
+        <label class="text-sm">Pajak <input id="ord-tax" type="number" class="w-full px-3 py-2 border rounded text-right"/></label>
+        <label class="text-sm sm:col-span-2">Dibayar <input id="ord-paid" type="number" class="w-full px-3 py-2 border rounded text-right"/></label>
+      </div>
+      <label class="text-sm">Catatan <textarea id="ord-note" class="w-full px-3 py-2 border rounded"></textarea></label>
+      <div class="flex justify-end gap-2 sticky bottom-0 bg-white pt-2">
+        <button id="ord-cancel" class="px-3 py-2 rounded border">Batal</button>
+        <button id="ord-save" class="px-3 py-2 rounded bg-indigo-600 text-white">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="/app.js"></script>
+
+  <!-- Sticky mobile checkout bar -->
+  <div id="mobile-bar" class="sm:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur border-t no-print">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
+      <div class="text-sm">
+        <div class="text-gray-500">Total</div>
+        <div id="mobile-total" class="font-semibold">Rp 0</div>
+      </div>
+      <button id="mobile-checkout" class="px-4 py-2 rounded bg-indigo-600 text-white text-sm">Simpan & Cetak</button>
+    </div>
+  </div>
+</body>
+</html>
