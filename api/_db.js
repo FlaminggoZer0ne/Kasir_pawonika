@@ -50,6 +50,19 @@ async function migrate() {
   `;
 }
 
+async function ensureSchema() {
+  try {
+    await sql`SELECT 1 FROM products LIMIT 1`;
+  } catch (e) {
+    // if products table missing, run full migrate
+    if (String(e.message || e).includes('does not exist')) {
+      await migrate();
+    } else {
+      throw e;
+    }
+  }
+}
+
 async function getSettings() {
   const { rows } = await sql`SELECT key, value FROM settings`;
   const obj = {}; rows.forEach(r => obj[r.key] = r.value); return obj;
@@ -77,4 +90,4 @@ async function nextInvoice() {
   return inv;
 }
 
-module.exports = { sql, migrate, getSettings, setSettings, nextInvoice };
+module.exports = { sql, migrate, ensureSchema, getSettings, setSettings, nextInvoice };

@@ -1,7 +1,8 @@
-const { sql } = require('../_db');
+const { sql, ensureSchema } = require('../_db');
 
 module.exports = async function handler(req, res) {
   try {
+    await ensureSchema();
     const url = new URL(req.url, `http://${req.headers.host}`);
     const idStr = url.pathname.split('/').pop();
     const id = Number(idStr);

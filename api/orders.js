@@ -1,7 +1,8 @@
-const { sql, nextInvoice } = require('./_db');
+const { sql, nextInvoice, ensureSchema } = require('./_db');
 
 module.exports = async function handler(req, res) {
   try {
+    await ensureSchema();
     if (req.method === 'GET') {
       const { rows } = await sql`SELECT * FROM orders ORDER BY created_at DESC`;
       return res.status(200).json(rows);

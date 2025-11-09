@@ -1,7 +1,8 @@
-const { sql } = require('./_db');
+const { sql, ensureSchema } = require('./_db');
 
 module.exports = async function handler(req, res) {
   try {
+    await ensureSchema();
     if (req.method === 'GET') {
       const { rows } = await sql`SELECT * FROM products ORDER BY name ASC`;
       return res.status(200).json(rows);
